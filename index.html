@@ -1,0 +1,140 @@
+<html>
+<head>
+	<title>Monitor</title>
+	<meta charset="UTF-8"> 
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+	<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+
+	<script type="text/javascript">
+
+	function refrescar(){
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				var json = JSON.parse(xhttp.responseText);
+
+				document.getElementById("uptime").innerHTML = 'Uptime: '+json[0];
+				console.log(json[0]);
+
+				document.getElementById('carga_cpu').style.width = json[1] + '%';
+				if(json[1] > 50)
+					document.getElementById('carga_cpu').style.backgroundColor = "red";
+				else if(json[1] > 20)
+					document.getElementById('carga_cpu').style.backgroundColor = "#d2d201";
+				else
+					document.getElementById('carga_cpu').style.backgroundColor = "green";
+
+				document.getElementById('carga_ram').style.width=json[2] + '%';
+				if(json[2] > 80)
+					document.getElementById('carga_ram').style.backgroundColor = "red";
+				else if(json[2] > 40)
+					document.getElementById('carga_ram').style.backgroundColor = "#d2d201";
+				else
+					document.getElementById('carga_ram').style.backgroundColor = "green";
+
+				document.getElementById("porcentaje_cpu").innerHTML = json[1];
+				document.getElementById("porcentaje_ram").innerHTML = json[2];
+			}
+		};
+		xhttp.open("GET", "info.php", true);
+		xhttp.send();
+
+	}
+
+	setInterval(function(){ refrescar(); }, 5000);
+
+	</script>
+
+	<style type="text/css">
+
+	body{
+		margin: 0;
+		background-color: #212121;
+		font-family: Verdana;
+		color: white;
+	}
+
+
+	#main {
+		width: 250px;
+		border: 3px solid #353535;
+		border-radius: 10%;
+		padding: 10px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -65px;
+		margin-left: -138px;
+		text-align: center;
+	}
+
+
+	#uptime {
+		color: #7FFF00;
+		font-size: 20px;
+		font-family: arial;
+	}
+
+	#barra_cpu, #barra_ram{
+		height: 20px;
+		position: relative;
+		background-color: gray;
+		text-align: center;
+		color: white;
+		margin: 10px 0;
+		float: right;
+		width: 82%;
+	}
+
+	.nombre {
+		margin: 10px 0;
+		float: left;
+		color: #bbbbbb;
+		font-weight: 600;
+	}
+
+	#carga_cpu, #carga_ram{
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		background-color: red;
+		height: 20px;
+		width: 0px;
+	}
+
+	#porcentaje_cpu, #porcentaje_ram {
+		position: absolute;
+		width: 100%;
+		left: 0;
+		top: 0;
+		text-align: center;
+	}
+
+	</style>
+
+</head>
+<body>
+
+<div id="main">
+	<div id="uptime">Uptime: </div>
+	<div id="load_cpu">
+		<span class="nombre">CPU</span>
+		<div id="barra_cpu">
+			<div id="carga_cpu"></div>
+			<div id="porcentaje_cpu"></div>
+		</div>
+	</div>
+	<div id="load_ram">
+		<span class="nombre">RAM</span>
+		<div id="barra_ram">
+			<div id="carga_ram"></div>
+			<div id="porcentaje_ram"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">refrescar();</script>
+</body>
+</html>
