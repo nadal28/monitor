@@ -11,6 +11,6 @@ unset($comando_uptime);
 //------------RAM------------
 preg_match_all('/\d+/', shell_exec('free -o | tr -s " "'), $ram);
 
-echo json_encode(array($uptime[0],round($load[0]),round(($ram[0][1]/$ram[0][0])*100,2)));
+echo json_encode(array($uptime[0],round($load[0]),round(($ram[0][1]/$ram[0][0])*100)));
 
 ?>
